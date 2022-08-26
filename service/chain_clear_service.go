@@ -21,9 +21,24 @@ const (
 	ChainNode2 = "CHAIN-NODE:CHAIN:NODE:STATUS"
 )
 
-// ChainDelete 删除链信息
-func ChainDelete(chainId uint64) {
+// DeleteChain 删除链信息
+func DeleteChain(chainId uint64) {
+	var err error
+	chainInfo, err := model.FindChainInfoById(chainId)
+	if err != nil {
+		return
+	}
 
+	if chainInfo != nil && chainInfo.ChainType == 0 {
+		deleteLatticeChain(chainId)
+	} else {
+		deleteHyperledger(chainId)
+	}
+}
+
+// 删除晶格链相关数据
+func deleteLatticeChain(chainId uint64) {
+	fmt.Println("start to delete lattice relation data!")
 	// 删除链相关缓存
 	var err error
 	chainIdStr := strconv.FormatUint(chainId, 10)
@@ -45,19 +60,19 @@ func ChainDelete(chainId uint64) {
 			InfoLtc, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(BlockLtc2+chainIdStr, 8)
+	err = utils.LikeDelete(BlockLtc2+chainIdStr, 9)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			BlockLtc2, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(InfoLtc2+chainIdStr, 8)
+	err = utils.LikeDelete(InfoLtc2+chainIdStr, 9)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			InfoLtc2, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(ChainNode2+chainIdStr, 8)
+	err = utils.LikeDelete(ChainNode2+chainIdStr, 9)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			ChainNode2, chainIdStr, err)
@@ -104,4 +119,9 @@ func ChainDelete(chainId uint64) {
 	// 查找联盟成员及权限
 	model.DeleteMemberByChain(chainId)
 	model.DeletePermissionsByChainId(chainId)
+}
+
+// 删除超级账本相关数据
+func deleteHyperledger(chainId uint64) {
+	fmt.Println("Start to delete hyperledger relation data!")
 }

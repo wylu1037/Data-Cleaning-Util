@@ -19,8 +19,8 @@ func (c Chain) TableName() string {
 	return "chain_info"
 }
 
-// QueryChainInfoById 查询链信息
-func QueryChainInfoById(chainId uint64) (*Chain, error) {
+// FindChainInfoById 查询链信息
+func FindChainInfoById(chainId uint64) (*Chain, error) {
 	var chain Chain
 	config.MySqlDB.Find(&chain, chainId)
 	chainData, err := json.Marshal(chain)
