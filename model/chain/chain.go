@@ -1,4 +1,4 @@
-package model
+package chain
 
 import (
 	"baas-clean/config"

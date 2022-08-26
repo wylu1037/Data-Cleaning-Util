@@ -1,4 +1,4 @@
-package model
+package certificate
 
 import (
 	"baas-clean/config"
@@ -27,4 +27,19 @@ func FindRootCAByChainId(chainId uint64) uint64 {
 func DeleteRootCAByChainId(chainId uint64) {
 	fmt.Printf("delete rootCA by chainId = %d \n", chainId)
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&RootCA{})
+}
+
+type ChildCA struct {
+	ID     uint64
+	rootId uint64
+}
+
+func (ChildCA) TableName() string {
+	return "chain_node_cert_config"
+}
+
+// DeleteChildCAByRootId 根据根证书删除子证书
+func DeleteChildCAByRootId(rootId uint64) {
+	fmt.Printf("delete chain childCA by rootId = %d \n", rootId)
+	config.MySqlDB.Where("rootId = ?", rootId).Delete(&ChildCA{})
 }

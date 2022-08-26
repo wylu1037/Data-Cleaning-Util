@@ -1,7 +1,10 @@
 package service
 
 import (
-	"baas-clean/model"
+	"baas-clean/model/certificate"
+	"baas-clean/model/chain"
+	"baas-clean/model/member"
+	"baas-clean/model/node"
 	"baas-clean/model/vote"
 	"baas-clean/utils"
 	"fmt"
@@ -65,7 +68,7 @@ func ChainDelete(chainId uint64) {
 	}
 
 	// 查找链关联的节点
-	nodes := model.FindNodesByChainId(chainId)
+	nodes := node.FindNodesByChainId(chainId)
 	fmt.Printf("Find nodes by chainId = %d, return result: %v \n", chainId, nodes)
 	for _, node := range *nodes {
 		// 删除节点相关缓存
@@ -85,10 +88,10 @@ func ChainDelete(chainId uint64) {
 	}
 
 	// 删除链数据
-	model.DeleteChainById(chainId)
+	chain.DeleteChainById(chainId)
 
 	// 删除关联的节点数据
-	model.DeleteNodes(*nodes)
+	node.DeleteNodes(*nodes)
 
 	// 删除节点关联的投票数据
 	for _, node := range *nodes {
@@ -97,11 +100,11 @@ func ChainDelete(chainId uint64) {
 	}
 
 	// 删除证书
-	rootId := model.FindRootCAByChainId(chainId)
-	model.DeleteChildCAByRootId(rootId)
-	model.DeleteRootCAByChainId(chainId)
+	rootId := certificate.FindRootCAByChainId(chainId)
+	certificate.DeleteChildCAByRootId(rootId)
+	certificate.DeleteRootCAByChainId(chainId)
 
 	// 查找联盟成员及权限
-	model.DeleteMemberByChain(chainId)
-	model.DeletePermissionsByChainId(chainId)
+	member.DeleteMemberByChain(chainId)
+	member.DeletePermissionsByChainId(chainId)
 }

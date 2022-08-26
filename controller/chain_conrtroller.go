@@ -1,7 +1,9 @@
 package controller
 
 import (
-	"baas-clean/model"
+	"baas-clean/model/certificate"
+	"baas-clean/model/chain"
+	"baas-clean/model/node"
 	"baas-clean/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -20,7 +22,7 @@ func queryChainInfoByIdHandler(c *gin.Context) {
 	chainIdStr := c.Query("chainId")
 	num, _ := strconv.Atoi(chainIdStr)
 	chainId := uint64(num)
-	data, err := model.QueryChainInfoById(chainId)
+	data, err := chain.QueryChainInfoById(chainId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
@@ -55,7 +57,7 @@ func findNodesByChainId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "查询节点列表成功！",
-		"data":    model.FindNodesByChainId(chainId),
+		"data":    node.FindNodesByChainId(chainId),
 	})
 }
 
@@ -64,7 +66,7 @@ func findRootCAByChainId(c *gin.Context) {
 	num, _ := strconv.Atoi(chainIdStr)
 	chainId := uint64(num)
 
-	rootId := model.FindRootCAByChainId(chainId)
+	rootId := certificate.FindRootCAByChainId(chainId)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "查询根证书成功！",
 		"data":    rootId,
