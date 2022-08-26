@@ -6,7 +6,7 @@ import (
 	"baas-clean/model/member"
 	"baas-clean/model/node"
 	"baas-clean/model/vote"
-	"baas-clean/utils"
+	"baas-clean/util"
 	"fmt"
 	"strconv"
 )
@@ -30,37 +30,37 @@ func ChainDelete(chainId uint64) {
 	// 删除链相关缓存
 	var err error
 	chainIdStr := strconv.FormatUint(chainId, 10)
-	err = utils.LikeDelete(ChainNode+chainIdStr, 7)
+	err = util.LikeDelete(ChainNode+chainIdStr, 7)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			ChainNode, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(BlockLtc+chainIdStr, 8)
+	err = util.LikeDelete(BlockLtc+chainIdStr, 8)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			BlockLtc, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(InfoLtc+chainIdStr, 8)
+	err = util.LikeDelete(InfoLtc+chainIdStr, 8)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			InfoLtc, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(BlockLtc2+chainIdStr, 8)
+	err = util.LikeDelete(BlockLtc2+chainIdStr, 8)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			BlockLtc2, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(InfoLtc2+chainIdStr, 8)
+	err = util.LikeDelete(InfoLtc2+chainIdStr, 8)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			InfoLtc2, chainIdStr, err)
 		return
 	}
-	err = utils.LikeDelete(ChainNode2+chainIdStr, 8)
+	err = util.LikeDelete(ChainNode2+chainIdStr, 8)
 	if err != nil {
 		fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 			ChainNode2, chainIdStr, err)
@@ -73,13 +73,13 @@ func ChainDelete(chainId uint64) {
 	for _, node := range *nodes {
 		// 删除节点相关缓存
 		nodeIdStr := strconv.FormatUint(node.ID, 10)
-		err = utils.LikeDelete(NodeVote+nodeIdStr, 7)
+		err = util.LikeDelete(NodeVote+nodeIdStr, 7)
 		if err != nil {
 			fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 				NodeVote, nodeIdStr, err)
 			return
 		}
-		err := utils.LikeDelete(NodeVoteTally+strconv.FormatUint(node.ID, 10), 7)
+		err := util.LikeDelete(NodeVoteTally+strconv.FormatUint(node.ID, 10), 7)
 		if err != nil {
 			fmt.Printf("chain_service delete redis cache occured error, key is %s%s, error message is %v \n",
 				NodeVoteTally, nodeIdStr, err)

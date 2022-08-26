@@ -5,9 +5,9 @@ import (
 	"baas-clean/model/chain"
 	"baas-clean/model/node"
 	"baas-clean/service"
+	"baas-clean/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 func ChainRoute(e *gin.Engine) {
@@ -19,9 +19,7 @@ func ChainRoute(e *gin.Engine) {
 
 // 查询链信息
 func queryChainInfoByIdHandler(c *gin.Context) {
-	chainIdStr := c.Query("chainId")
-	num, _ := strconv.Atoi(chainIdStr)
-	chainId := uint64(num)
+	chainId := util.Str2uint64(c.Query("chainId"))
 	data, err := chain.QueryChainInfoById(chainId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -38,8 +36,7 @@ func queryChainInfoByIdHandler(c *gin.Context) {
 
 // 删除链及相关信息
 func deleteChainInfoHandler(c *gin.Context) {
-	num, _ := strconv.Atoi(c.Param("chainId"))
-	chinId := uint64(num)
+	chinId := util.Str2uint64(c.Query("chainId"))
 
 	service.ChainDelete(chinId)
 
@@ -51,9 +48,7 @@ func deleteChainInfoHandler(c *gin.Context) {
 
 // 根据链id查询节点列表
 func findNodesByChainId(c *gin.Context) {
-	chainIdStr := c.Query("chainId")
-	num, _ := strconv.Atoi(chainIdStr)
-	chainId := uint64(num)
+	chainId := util.Str2uint64(c.Query("chainId"))
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "查询节点列表成功！",
@@ -62,9 +57,7 @@ func findNodesByChainId(c *gin.Context) {
 }
 
 func findRootCAByChainId(c *gin.Context) {
-	chainIdStr := c.Query("chainId")
-	num, _ := strconv.Atoi(chainIdStr)
-	chainId := uint64(num)
+	chainId := util.Str2uint64(c.Query("chainId"))
 
 	rootId := certificate.FindRootCAByChainId(chainId)
 	c.JSON(http.StatusOK, gin.H{

@@ -2,7 +2,7 @@ package chain
 
 import (
 	"baas-clean/config"
-	"encoding/json"
+	"baas-clean/util"
 	"fmt"
 )
 
@@ -23,11 +23,7 @@ func (c Chain) TableName() string {
 func QueryChainInfoById(chainId uint64) (*Chain, error) {
 	var chain Chain
 	config.MySqlDB.Find(&chain, chainId)
-	chainData, err := json.Marshal(chain)
-	if err == nil {
-		return nil, err
-	}
-	fmt.Println(string(chainData))
+	fmt.Println(util.ToStr(chain))
 	return &chain, nil
 }
 
