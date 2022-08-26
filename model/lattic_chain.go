@@ -33,5 +33,6 @@ func QueryChainInfoById(chainId uint64) (*Chain, error) {
 
 // DeleteChainById 删除链数据
 func DeleteChainById(chainId uint64) {
+	fmt.Printf("delete chain by id = %d \n", chainId)
 	config.MySqlDB.Delete(&Chain{}, chainId).Limit(1)
 }

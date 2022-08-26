@@ -2,6 +2,7 @@ package service
 
 import (
 	"baas-clean/model"
+	"baas-clean/model/vote"
 	"baas-clean/utils"
 	"fmt"
 	"strconv"
@@ -65,6 +66,7 @@ func ChainDelete(chainId uint64) {
 
 	// 查找链关联的节点
 	nodes := model.FindNodesByChainId(chainId)
+	fmt.Printf("Find nodes by chainId = %d, return result: %v \n", chainId, nodes)
 	for _, node := range *nodes {
 		// 删除节点相关缓存
 		nodeIdStr := strconv.FormatUint(node.ID, 10)
@@ -85,11 +87,21 @@ func ChainDelete(chainId uint64) {
 	// 删除链数据
 	model.DeleteChainById(chainId)
 
-	// 查找链关联的节点
+	// 删除关联的节点数据
+	model.DeleteNodes(*nodes)
+
+	// 删除节点关联的投票数据
+	for _, node := range *nodes {
+		vote.DeleteNodeVoteByNodeId(node.ID)
+		vote.DeleteNodeVoteDetailsByNodeId(node.ID)
+	}
+
+	// 删除证书
+	rootId := model.FindRootCAByChainId(chainId)
+	model.DeleteChildCAByRootId(rootId)
+	model.DeleteRootCAByChainId(chainId)
 
 	// 查找联盟成员及权限
-
-	// 查找证书
-
-	//
+	model.DeleteMemberByChain(chainId)
+	model.DeletePermissionsByChainId(chainId)
 }

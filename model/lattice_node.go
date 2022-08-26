@@ -27,3 +27,16 @@ func FindNodesByChainId(chainId uint64) *[]Node {
 
 	return &nodes
 }
+
+// DeleteNodes 删除节点
+func DeleteNodes(nodes []Node) {
+	for _, node := range nodes {
+		deleteNodeById(node.ID)
+	}
+}
+
+// 根据主键删除节点
+func deleteNodeById(nodeId uint64) {
+	fmt.Printf("delete node by id = %d \n", nodeId)
+	config.MySqlDB.Delete(&Node{}, nodeId).Limit(1)
+}
