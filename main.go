@@ -1,11 +1,11 @@
 package main
 
 import (
-	"baas-clean/config"
-	"baas-clean/controller"
-	"baas-clean/router"
+	"clear-chain/config"
+	"clear-chain/controller"
+	"clear-chain/router"
+	"github.com/gin-gonic/gin"
 )
-import "github.com/gin-gonic/gin"
 
 // 环境初始化
 func init() {

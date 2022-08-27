@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"baas-clean/model/certificate"
-	"baas-clean/model/chain"
-	"baas-clean/model/node"
-	"baas-clean/service"
-	"baas-clean/util"
+	"clear-chain/model/certificate"
+	"clear-chain/model/chain"
+	"clear-chain/model/node"
+	"clear-chain/service"
+	"clear-chain/util"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -20,7 +21,7 @@ func ChainRoute(e *gin.Engine) {
 // 查询链信息
 func queryChainInfoByIdHandler(c *gin.Context) {
 	chainId := util.Str2uint64(c.Query("chainId"))
-	data, err := chain.QueryChainInfoById(chainId)
+	data, err := chain.FindChainInfoById(chainId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
@@ -36,9 +37,11 @@ func queryChainInfoByIdHandler(c *gin.Context) {
 
 // 删除链及相关信息
 func deleteChainInfoHandler(c *gin.Context) {
-	chinId := util.Str2uint64(c.Query("chainId"))
+	chainId := util.Str2uint64(c.Param("chainId"))
 
-	service.ChainDelete(chinId)
+	logrus.Infof("[chainconrtroller] deleteChainInfoHandler() called with: chainId = %d", chainId)
+
+	service.DeleteChain(chainId)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "删除成功！",

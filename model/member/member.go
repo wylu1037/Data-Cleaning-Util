@@ -1,8 +1,8 @@
 package member
 
 import (
-	"baas-clean/config"
-	"fmt"
+	"clear-chain/config"
+	"github.com/sirupsen/logrus"
 )
 
 type LeagueMember struct {
@@ -23,7 +23,8 @@ func FindMembersByChainId(chainId uint64) []LeagueMember {
 }
 
 func DeleteMemberByChain(chainId uint64) {
-	fmt.Printf("delete member by chainId = %d \n", chainId)
+	logrus.Infof("[member] DeleteMemberByChain() called with: chainId = %d", chainId)
+
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&LeagueMember{})
 }
 
@@ -38,6 +39,7 @@ func (Permissions) TableName() string {
 
 // DeletePermissionsByChainId 根据链删除联盟成员权限
 func DeletePermissionsByChainId(chainId uint64) {
-	fmt.Printf("delete permissions by chainId = %d \n", chainId)
+	logrus.Infof("[member] DeletePermissionsByChainId() called with: chainId = %d", chainId)
+
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&Permissions{})
 }

@@ -1,9 +1,9 @@
 package util
 
 import (
-	"baas-clean/config"
-	"fmt"
+	"clear-chain/config"
 	"github.com/gomodule/redigo/redis"
+	"github.com/sirupsen/logrus"
 )
 
 // Select 选择库
@@ -43,7 +43,8 @@ func delete(key string, conn redis.Conn) {
 
 // LikeDelete 批量删除
 func LikeDelete(key string, db uint8) error {
-	fmt.Printf("redis delete like key %s, db is %d \n", key, db)
+	logrus.Infof("[redisutil] LikeDelete() called with: key = %s, db = %d", key, db)
+
 	conn, _ := Select(db)
 	defer conn.Close()
 

@@ -1,9 +1,10 @@
 package node
 
 import (
-	"baas-clean/config"
+	"clear-chain/config"
 	"encoding/json"
 	"fmt"
+	"github.com/sirupsen/logrus"
 )
 
 type Node struct {
@@ -37,6 +38,7 @@ func DeleteNodes(nodes []Node) {
 
 // 根据主键删除节点
 func deleteNodeById(nodeId uint64) {
-	fmt.Printf("delete node by id = %d \n", nodeId)
+	logrus.Infof("[node] deleteNodeById() called with: nodeId = %d", nodeId)
+
 	config.MySqlDB.Delete(&Node{}, nodeId).Limit(1)
 }

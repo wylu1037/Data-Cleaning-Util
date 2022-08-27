@@ -1,8 +1,8 @@
 package certificate
 
 import (
-	"baas-clean/config"
-	"fmt"
+	"clear-chain/config"
+	"github.com/sirupsen/logrus"
 )
 
 type RootCA struct {
@@ -19,13 +19,13 @@ func (RootCA) TableName() string {
 func FindRootCAByChainId(chainId uint64) uint64 {
 	var rootCA RootCA
 	config.MySqlDB.Where("chainId = ? and deleteFlag = ?", chainId, 0).First(&rootCA)
-	fmt.Printf("find rootCA by chainId = %d, return rootId = %d \n", chainId, rootCA.ID)
 	return rootCA.ID
 }
 
 // DeleteRootCAByChainId 根据链删除根证书
 func DeleteRootCAByChainId(chainId uint64) {
-	fmt.Printf("delete rootCA by chainId = %d \n", chainId)
+	logrus.Infof("[certificate] DeleteRootCAByChainId() called with: chainId = %d", chainId)
+
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&RootCA{})
 }
 
@@ -40,6 +40,7 @@ func (ChildCA) TableName() string {
 
 // DeleteChildCAByRootId 根据根证书删除子证书
 func DeleteChildCAByRootId(rootId uint64) {
-	fmt.Printf("delete chain childCA by rootId = %d \n", rootId)
+	logrus.Infof("[certificate] DeleteChildCAByRootId() called with: rootId = %d", rootId)
+
 	config.MySqlDB.Where("rootId = ?", rootId).Delete(&ChildCA{})
 }

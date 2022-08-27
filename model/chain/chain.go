@@ -1,9 +1,8 @@
 package chain
 
 import (
-	"baas-clean/config"
-	"baas-clean/util"
-	"fmt"
+	"clear-chain/config"
+	"github.com/sirupsen/logrus"
 )
 
 type Chain struct {
@@ -19,16 +18,19 @@ func (c Chain) TableName() string {
 	return "chain_info"
 }
 
-// QueryChainInfoById 查询链信息
-func QueryChainInfoById(chainId uint64) (*Chain, error) {
+// FindChainInfoById 查询链信息
+func FindChainInfoById(chainId uint64) (*Chain, error) {
+	logrus.Infof("[chain] FindChainInfoById() called with: chainId = %d", chainId)
+
 	var chain Chain
 	config.MySqlDB.Find(&chain, chainId)
-	fmt.Println(util.ToStr(chain))
+
 	return &chain, nil
 }
 
 // DeleteChainById 删除链数据
 func DeleteChainById(chainId uint64) {
-	fmt.Printf("delete chain by id = %d \n", chainId)
+	logrus.Infof("[chain] DeleteChainById() called with: chainId = %d", chainId)
+
 	config.MySqlDB.Delete(&Chain{}, chainId).Limit(1)
 }

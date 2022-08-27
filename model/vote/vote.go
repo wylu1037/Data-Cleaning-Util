@@ -1,8 +1,8 @@
 package vote
 
 import (
-	"baas-clean/config"
-	"fmt"
+	"clear-chain/config"
+	"github.com/sirupsen/logrus"
 )
 
 type NodeVote struct {
@@ -16,7 +16,8 @@ func (NodeVote) TableName() string {
 
 // DeleteNodeVoteByNodeId 根据节点删除节点投票主题数据
 func DeleteNodeVoteByNodeId(nodeId uint64) {
-	fmt.Printf("delete node vote by nodeId = %d \n", nodeId)
+	logrus.Infof("[vote] DeleteNodeVoteByNodeId() called with: nodeId = %d", nodeId)
+
 	config.MySqlDB.Where("nodeId = ?", nodeId).Delete(&NodeVote{})
 }
 
@@ -31,6 +32,7 @@ func (NodeVoteDetails) TableName() string {
 
 // DeleteNodeVoteDetailsByNodeId 根据节点删除节点投票详情数据
 func DeleteNodeVoteDetailsByNodeId(nodeId uint64) {
-	fmt.Printf("delete node vote details by nodeId = %d\n", nodeId)
+	logrus.Infof("[vote] DeleteNodeVoteDetailsByNodeId() called with: nodeId = %d", nodeId)
+
 	config.MySqlDB.Where("nodeId = ?", nodeId).Delete(&NodeVoteDetails{})
 }
