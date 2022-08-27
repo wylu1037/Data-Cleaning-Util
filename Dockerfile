@@ -1,19 +1,28 @@
-FROM golang:1.18-alpine
+FROM golang:1.18-alpine AS builder
 
 ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
     GOPROXY=https://goproxy.cn,direct \
-    GIN_MODE=release \
+    GOOS=linux \
+    GOARCH=amd64
 
-WORKDIR /tmp
+WORKDIR /build
+
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
 # 将源码拷贝到容器中
 COPY . .
 
 # 将代码编译成二进制可执行文件app
-RUN go build -o app .
+RUN go build -o clear
+
+FROM scratch
 
 WORKDIR /app
-RUN cp /tmp/app .
-EXPOSE 8080
 
-ENTRYPOINT ["/app/app"]
+COPY --from=builder /build/clear .
+COPY --from=builder /build/config/application.ini ./config/
+
+ENTRYPOINT ["/app/clear"]
