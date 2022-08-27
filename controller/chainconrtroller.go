@@ -15,7 +15,6 @@ func ChainRoute(e *gin.Engine) {
 	e.GET("/chain/query", queryChainInfoByIdHandler)
 	e.GET("/chain/delete/:chainId", deleteChainInfoHandler)
 	e.GET("/chain/findNodes", findNodesByChainId)
-	e.GET("/certificate/findRootCA", findRootCAByChainId)
 }
 
 // 查询链信息

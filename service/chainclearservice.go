@@ -3,10 +3,12 @@ package service
 import (
 	"clear-chain/model/certificate"
 	"clear-chain/model/chain"
+	"clear-chain/model/channel"
 	"clear-chain/model/member"
 	"clear-chain/model/node"
 	"clear-chain/model/vote"
 	"clear-chain/util"
+	"clear-chain/util/json"
 	"github.com/sirupsen/logrus"
 	"strconv"
 )
@@ -73,6 +75,22 @@ func deleteLatticeChain(chainId uint64) {
 // 删除超级账本
 func deleteHyperledger(chainId uint64) {
 	logrus.Infof("[chainclearservice] deleteHyperledger() called with: chainId = %d", chainId)
+
+	nodes := node.FindHyperledgerNodesByChainId(chainId)
+	deleteHyperledgerCache(chainId, nodes)
+	chain.DeleteChainById(chainId)
+	node.DeleteHyperledgerNodes(nodes)
+	for _, nodeInfo := range nodes {
+		vote.DeleteNodeVoteByNodeId(nodeInfo.ID)
+		vote.DeleteNodeVoteDetailsByNodeId(nodeInfo.ID)
+	}
+	rootId := certificate.FindRootCAByChainId(chainId)
+	certificate.DeleteChildCAByRootId(rootId)
+	certificate.DeleteRootCAByChainId(chainId)
+	member.DeleteMemberByChain(chainId)
+	member.DeletePermissionsByChainId(chainId)
+
+	channel.DeleteChannelByChainId(chainId)
 }
 
 // 删除缓存
@@ -119,7 +137,6 @@ func deleteCache(chainId uint64, nodes []node.Node) {
 		return
 	}
 
-	logrus.Infof("[chainclearservice] find nodes by chainId = %d, return result = %v", chainId, nodes)
 	for _, nodeInfo := range nodes {
 		// 删除节点相关缓存
 		nodeIdStr := strconv.FormatUint(nodeInfo.ID, 10)
@@ -135,5 +152,24 @@ func deleteCache(chainId uint64, nodes []node.Node) {
 				NodeVoteTally, nodeIdStr, err)
 			return
 		}
+	}
+}
+
+func deleteHyperledgerCache(chainId uint64, nodes []node.HyperledgerNode) {
+	logrus.Infof("[chainclearservice] deleteHyperledgerCache() called with: chainId = %d, nodes = %v",
+		chainId, json.ToStr(nodes))
+
+	if nodes != nil && len(nodes) > 0 {
+		// 转换
+		newNodes := make([]node.Node, len(nodes))
+		for i, nodeInfo := range nodes {
+			newNodes[i] = node.Node{
+				ID: nodeInfo.ID,
+			}
+		}
+
+		deleteCache(chainId, newNodes)
+	} else {
+		logrus.Infof("")
 	}
 }
