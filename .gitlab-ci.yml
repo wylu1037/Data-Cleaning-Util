@@ -6,6 +6,7 @@ stages:
   - push
 
 build_job:
+  image: docker:latest
   stage: build
   only:
     - master
@@ -15,6 +16,7 @@ build_job:
     - docker build -t $APP_NAME:latest .
 
 push_job:
+  image: docker:latest
   stage: push
   only:
     - master
