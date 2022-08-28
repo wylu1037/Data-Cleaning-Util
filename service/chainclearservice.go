@@ -4,6 +4,7 @@ import (
 	"clear-chain/model/certificate"
 	"clear-chain/model/chain"
 	"clear-chain/model/channel"
+	"clear-chain/model/contract"
 	"clear-chain/model/member"
 	"clear-chain/model/node"
 	"clear-chain/model/vote"
@@ -95,7 +96,7 @@ func deleteHyperledger(chainId uint64) {
 	channel.DeleteChannelMembers(channels)
 	channel.DeleteAuditChannels(channels)
 	certificate.DeleteHyperledgerCertificateByChainId(chainId)
-
+	contract.DeleteHyperledgerContracts(channels)
 }
 
 // 删除缓存
