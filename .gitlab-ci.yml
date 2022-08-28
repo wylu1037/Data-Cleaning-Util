@@ -11,9 +11,9 @@ build_job:
   only:
     - master
   before_script:
-    - echo "Start build project \"$APP_NAME\"......"
+    - echo "Start build project clear-chain"......"
   script:
-    - docker build -t $APP_NAME:latest .
+    - docker build -t clear-chain:latest .
 
 push_job:
   image: docker:latest
@@ -23,5 +23,5 @@ push_job:
   before_script:
     - echo 'Start push image to docker hub......'
   script:
-    - docker tag $APP_NAME:latest wylu1037/hust:$APP_NAME
-    - docker push wylu1037/hust:$APP_NAME
+    - docker tag clear-chain:latest wylu1037/hust:clear-chain
+    - docker push wylu1037/hust:clear-chain
