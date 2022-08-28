@@ -17,6 +17,6 @@ build_job:
   script:
     - docker build -t $IMAGE_NAME .
     - echo 'Start push image to docker hub......'
-    - docker "$HUB_PASSWORD" | login --username $HUB_USERNAME --password-stdin
+    - echo "$HUB_PASSWORD" | docker login --username $HUB_USERNAME --password-stdin
     - docker tag $IMAGE_NAME $HUB_USERNAME/hust:$PROJECT_NAME
     - docker push $HUB_USERNAME/hust:$PROJECT_NAME
