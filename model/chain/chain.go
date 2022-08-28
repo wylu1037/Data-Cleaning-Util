@@ -50,3 +50,12 @@ func DeleteHyperledgerUpChainRecordByChainId(chainId uint64) {
 
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&HyperledgerUpChainRecord{})
 }
+
+// FindRangeChainInfo 查询指定范围内的链信息
+func FindRangeChainInfo(begin, end uint64) []Chain {
+	logrus.Infof("[chain] FindRangeChainInfo() called with: begin = %d, end = %d", begin, end)
+
+	var chains []Chain
+	config.MySqlDB.Where("id >= ? and id <= ?", begin, end).Find(&chains)
+	return chains
+}

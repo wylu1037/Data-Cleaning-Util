@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"clear-chain/model/certificate"
 	"clear-chain/model/chain"
 	"clear-chain/model/node"
 	"clear-chain/service"
@@ -15,6 +14,7 @@ func ChainRoute(e *gin.Engine) {
 	e.GET("/chain/query", queryChainInfoByIdHandler)
 	e.GET("/chain/delete/:chainId", deleteChainInfoHandler)
 	e.GET("/chain/findNodes", findNodesByChainId)
+	e.GET("/chain/range/delete/:begin/:end", deleteRangeChainInfoHandler)
 }
 
 // 查询链信息
@@ -58,12 +58,14 @@ func findNodesByChainId(c *gin.Context) {
 	})
 }
 
-func findRootCAByChainId(c *gin.Context) {
-	chainId := util.Str2uint64(c.Query("chainId"))
+func deleteRangeChainInfoHandler(c *gin.Context) {
+	begin := util.Str2uint64(c.Param("begin"))
+	end := util.Str2uint64(c.Param("end"))
 
-	rootId := certificate.FindRootCAByChainId(chainId)
+	service.DeleteRangeChain(begin, end)
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "查询根证书成功！",
-		"data":    rootId,
+		"message": "删除范围内的链成功！",
+		"data":    nil,
 	})
 }

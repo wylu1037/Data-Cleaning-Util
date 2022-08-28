@@ -27,6 +27,16 @@ const (
 	ChainNode2 = "CHAIN-NODE:CHAIN:NODE:STATUS"
 )
 
+func DeleteRangeChain(begin, end uint64) {
+	chains := chain.FindRangeChainInfo(begin, end)
+	if chains == nil || len(chains) == 0 {
+		return
+	}
+	for _, ele := range chains {
+		DeleteChain(ele.ID)
+	}
+}
+
 // DeleteChain 删除链信息
 func DeleteChain(chainId uint64) {
 	logrus.Infof("[chainclearservice] DeleteChain() called with: chainId = %d", chainId)
