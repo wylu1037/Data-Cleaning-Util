@@ -22,7 +22,7 @@ func main() {
 	gin.SetMode(config.ServerSetting.RunMode)
 
 	// 注册路由
-	router.Register(controller.ChainRoute)
+	router.Register(controller.ChainRoute, controller.ChainAccountRoute)
 
 	r := router.Init()
 	err := r.Run(":8081")
