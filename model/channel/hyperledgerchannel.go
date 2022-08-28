@@ -2,6 +2,7 @@ package channel
 
 import (
 	"clear-chain/config"
+	"clear-chain/util/json"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,4 +31,58 @@ func DeleteChannelByChainId(chainId uint64) {
 	logrus.Infof("[hyperledgerchannel] DeleteChannelByChainId() called with: chainId = %d", chainId)
 
 	config.MySqlDB.Where("chainId = ?", chainId).Delete(&Channel{})
+}
+
+type Member struct {
+	ID        uint64
+	ChannelId uint64
+}
+
+func (Member) TableName() string {
+	return "fabric_chain_channel_member"
+}
+
+func DeleteChannelMembers(channels []Channel) {
+	logrus.Infof("[hyperledgerchannel] DeleteChannelMembers() called with: channels = %v", json.ToStr(channels))
+
+	if channels == nil || len(channels) == 0 {
+		return
+	}
+
+	for _, channel := range channels {
+		deleteChannelMember(channel.ID)
+	}
+}
+
+func deleteChannelMember(channelId uint64) {
+	logrus.Infof("[hyperledgerchannel] deleteChannelMember() called with: channelId = %d", channelId)
+
+	config.MySqlDB.Where("channelId = ?", channelId).Delete(&Member{}, channelId)
+}
+
+type AuditChannel struct {
+	ID        uint64
+	ChannelId uint64
+	AccountId uint64
+}
+
+func (AuditChannel) TableName() string {
+	return "fabric_chain_channel_audit"
+}
+
+func DeleteAuditChannels(channels []Channel) {
+	logrus.Infof("[hyperledgerchannel] DeleteAuditChannels() called with: channels = %v", json.ToStr(channels))
+	if channels == nil || len(channels) == 0 {
+		return
+	}
+
+	for _, channel := range channels {
+		deleteAuditChannel(channel.ID)
+	}
+}
+
+func deleteAuditChannel(channelId uint64) {
+	logrus.Infof("[hyperledgerchannel] deleteAuditChannel() called with: channelId = %d", channelId)
+
+	config.MySqlDB.Where("channelId = ?", channelId).Delete(&AuditChannel{})
 }

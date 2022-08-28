@@ -90,7 +90,11 @@ func deleteHyperledger(chainId uint64) {
 	member.DeleteMemberByChain(chainId)
 	member.DeletePermissionsByChainId(chainId)
 
+	channels := channel.FindChannels(chainId)
 	channel.DeleteChannelByChainId(chainId)
+	channel.DeleteChannelMembers(channels)
+	channel.DeleteAuditChannels(channels)
+
 }
 
 // 删除缓存
