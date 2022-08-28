@@ -7,7 +7,7 @@ import (
 
 type NodeVote struct {
 	ID     uint64
-	NodeId uint64
+	NodeId uint64 `gorm:"column:nodeId"`
 }
 
 func (NodeVote) TableName() string {
@@ -23,7 +23,7 @@ func DeleteNodeVoteByNodeId(nodeId uint64) {
 
 type NodeVoteDetails struct {
 	ID     uint64
-	NodeId uint64
+	NodeId uint64 `gorm:"column:nodeId"`
 }
 
 func (NodeVoteDetails) TableName() string {

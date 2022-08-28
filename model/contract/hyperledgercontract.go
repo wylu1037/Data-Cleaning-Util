@@ -9,7 +9,7 @@ import (
 
 type HyperledgerContract struct {
 	ID        uint64
-	ChannelId uint64
+	ChannelId uint64 `gorm:"column:channelId"`
 }
 
 func (HyperledgerContract) TableName() string {

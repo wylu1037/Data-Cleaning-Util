@@ -6,11 +6,12 @@ import (
 )
 
 type Chain struct {
-	ID           uint64 `gorm:"primaryKey"`
-	BlockChainId string
+	ID           uint64
+	BlockChainId string `gorm:"column:blockchainId"`
 	Version      string
 	Name         string
-	ChainType    uint8 // 链类型：0-晶格链
+	ChainType    int8   `gorm:"column:chainType"`
+	AccountId    uint64 `gorm:"column:accountId"`
 }
 
 // TableName 实现接口重写表名
@@ -23,7 +24,7 @@ func FindChainInfoById(chainId uint64) (*Chain, error) {
 	logrus.Infof("[chain] FindChainInfoById() called with: chainId = %d", chainId)
 
 	var chain Chain
-	config.MySqlDB.Find(&chain, chainId)
+	config.MySqlDB.First(&chain, chainId)
 
 	return &chain, nil
 }
@@ -37,7 +38,7 @@ func DeleteChainById(chainId uint64) {
 
 type HyperledgerUpChainRecord struct {
 	ID      uint64
-	ChainId uint64
+	ChainId uint64 `gorm:"column:chainId"`
 }
 
 func (HyperledgerUpChainRecord) TableName() string {

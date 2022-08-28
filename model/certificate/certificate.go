@@ -7,8 +7,8 @@ import (
 
 type RootCA struct {
 	ID         uint64 `gorm:"primaryKey"`
-	ChainId    uint64
-	DeleteFlag uint8
+	ChainId    uint64 `gorm:"column:chainId"`
+	DeleteFlag uint8  `gorm:"column:deleteFlag"`
 }
 
 func (RootCA) TableName() string {
@@ -31,7 +31,7 @@ func DeleteRootCAByChainId(chainId uint64) {
 
 type ChildCA struct {
 	ID     uint64
-	rootId uint64
+	RootId uint64 `gorm:"column:rootId"`
 }
 
 func (ChildCA) TableName() string {
@@ -47,7 +47,7 @@ func DeleteChildCAByRootId(rootId uint64) {
 
 type HyperledgerCertificate struct {
 	ID      uint64
-	chainId uint64
+	ChainId uint64 `gorm:"column:chainId"`
 }
 
 func (HyperledgerCertificate) TableName() string {

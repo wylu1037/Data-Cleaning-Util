@@ -8,7 +8,7 @@ import (
 type Node struct {
 	ID      uint64
 	Name    string
-	ChainId uint64
+	ChainId uint64 `gorm:"column:chainId"`
 	IP      string
 }
 
@@ -40,11 +40,11 @@ func deleteNodeById(nodeId uint64) {
 
 type HyperledgerNode struct {
 	ID         uint64
-	ChainId    uint64
-	OrgId      uint64
-	HostId     uint64
-	NodeType   uint8
-	NodeUserId uint64
+	ChainId    uint64 `gorm:"column:chainId"`
+	OrgId      uint64 `gorm:"column:orgId"`
+	HostId     uint64 `gorm:"column:hostId"`
+	NodeType   uint8  `gorm:"column:nodeType"`
+	NodeUserId uint64 `gorm:"column:nodeUserId"`
 }
 
 func (HyperledgerNode) TableName() string {

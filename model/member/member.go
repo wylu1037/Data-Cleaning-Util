@@ -7,8 +7,8 @@ import (
 
 type LeagueMember struct {
 	ID      uint64 // 联盟成员id
-	ChainId uint64
-	NodeId  uint64
+	ChainId uint64 `gorm:"column:chainId"`
+	NodeId  uint64 `gorm:"column:nodeId"`
 }
 
 func (LeagueMember) TableName() string {
@@ -29,8 +29,8 @@ func DeleteMemberByChain(chainId uint64) {
 }
 
 type Permissions struct {
-	UserId  uint64 // 指向联盟成员id
-	ChainId uint64
+	UserId  uint64 `gorm:"column:userId"`
+	ChainId uint64 `gorm:"column:chainId"`
 }
 
 func (Permissions) TableName() string {

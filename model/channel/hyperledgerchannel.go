@@ -8,9 +8,9 @@ import (
 
 type Channel struct {
 	ID          uint64
-	ChannelName string
-	ChainId     uint64
-	DeleteFlag  uint8 `json:"_"`
+	ChannelName string `gorm:"column:channelName"`
+	ChainId     uint64 `gorm:"column:chainId"`
+	DeleteFlag  uint8  `gorm:"column:deleteFlag"`
 }
 
 func (Channel) TableName() string {
@@ -35,7 +35,7 @@ func DeleteChannelByChainId(chainId uint64) {
 
 type Member struct {
 	ID        uint64
-	ChannelId uint64
+	ChannelId uint64 `gorm:"column:channelId"`
 }
 
 func (Member) TableName() string {
@@ -62,8 +62,8 @@ func deleteChannelMember(channelId uint64) {
 
 type AuditChannel struct {
 	ID        uint64
-	ChannelId uint64
-	AccountId uint64
+	ChannelId uint64 `gorm:"column:channelId"`
+	AccountId uint64 `gorm:"column:accountId"`
 }
 
 func (AuditChannel) TableName() string {
