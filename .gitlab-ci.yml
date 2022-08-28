@@ -16,5 +16,6 @@ build_job:
   script:
     - docker build -t clear-chain:latest .
     - echo 'Start push image to docker hub......'
+    - docker login -u wylu1037 -p lwy970515
     - docker tag clear-chain:latest wylu1037/hust:clear-chain
     - docker push wylu1037/hust:clear-chain
