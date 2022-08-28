@@ -1,0 +1,25 @@
+variables:
+  APP_NAME: clear-chain
+
+stages:
+  - build
+  - push
+
+build_job:
+  stage: build
+  only:
+    - master
+  before_script:
+    - echo "Start build project \"$APP_NAME\"......"
+  script:
+    - docker build -t $APP_NAME:latest .
+
+push_job:
+  stage: push
+  only:
+    - master
+  before_script:
+    - echo 'Start push image to docker hub......'
+  script:
+    - docker tag $APP_NAME:latest wylu1037/hust:$APP_NAME
+    - docker push wylu1037/hust:$APP_NAME
