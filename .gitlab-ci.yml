@@ -11,7 +11,7 @@ build_job:
   only:
     - master
   before_script:
-    - echo "Start build project clear-chain"......"
+    - echo "Start build project clear-chain......"
   script:
     - docker build -t clear-chain:latest .
 
