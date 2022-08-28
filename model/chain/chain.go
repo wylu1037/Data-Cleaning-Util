@@ -34,3 +34,18 @@ func DeleteChainById(chainId uint64) {
 
 	config.MySqlDB.Delete(&Chain{}, chainId).Limit(1)
 }
+
+type HyperledgerUpChainRecord struct {
+	ID      uint64
+	ChainId uint64
+}
+
+func (HyperledgerUpChainRecord) TableName() string {
+	return "fabric_chain_record"
+}
+
+func DeleteHyperledgerUpChainRecordByChainId(chainId uint64) {
+	logrus.Infof("[chain] DeleteHyperledgerUpChainRecordByChainId() called with: chainId = %d", chainId)
+
+	config.MySqlDB.Where("chainId = ?", chainId).Delete(&HyperledgerUpChainRecord{})
+}

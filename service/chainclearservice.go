@@ -97,6 +97,7 @@ func deleteHyperledger(chainId uint64) {
 	channel.DeleteAuditChannels(channels)
 	certificate.DeleteHyperledgerCertificateByChainId(chainId)
 	contract.DeleteHyperledgerContracts(channels)
+	chain.DeleteHyperledgerUpChainRecordByChainId(chainId)
 }
 
 // 删除缓存
