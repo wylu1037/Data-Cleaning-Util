@@ -16,7 +16,7 @@ build_job:
     - docker:dind
   script:
     - docker build -t $IMAGE_NAME .
-    - echo 'Start to push image \"$IMAGE_NAME\" to docker hub......'
+    - echo "Start to push image \"$IMAGE_NAME\" to docker hub......"
     - echo "$HUB_PASSWORD" | docker login --username $HUB_USERNAME --password-stdin
     - docker tag $IMAGE_NAME $HUB_USERNAME/hust:$PROJECT_NAME
     - docker push $HUB_USERNAME/hust:$PROJECT_NAME
