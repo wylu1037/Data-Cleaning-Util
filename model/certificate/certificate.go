@@ -44,3 +44,18 @@ func DeleteChildCAByRootId(rootId uint64) {
 
 	config.MySqlDB.Where("rootId = ?", rootId).Delete(&ChildCA{})
 }
+
+type HyperledgerCertificate struct {
+	ID      uint64
+	chainId uint64
+}
+
+func (HyperledgerCertificate) TableName() string {
+	return "fabric_node_cert"
+}
+
+func DeleteHyperledgerCertificateByChainId(chainId uint64) {
+	logrus.Infof("[certificate] DeleteHyperledgerCertificateByChainId() called with: chainId = %d", chainId)
+
+	config.MySqlDB.Where("chainId = ?", chainId).Delete(&HyperledgerCertificate{})
+}
