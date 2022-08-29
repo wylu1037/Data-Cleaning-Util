@@ -1,0 +1,23 @@
+variables:
+  PROJECT_NAME: clear-chain
+  IMAGE_NAME: clear-chain:latest
+
+stages:
+  - build
+
+build_job:
+  image: docker:latest
+  stage: build
+  only:
+    - master
+  before_script:
+    - echo "Start to build project \"$PROJECT_NAME\"......"
+  services:
+    - docker:dind
+  script:
+    - docker build -t $IMAGE_NAME .
+    - echo "Start to push image \"$IMAGE_NAME\" to docker hub......"
+    - echo "$HUB_PASSWORD" | docker login --username $HUB_USERNAME --password-stdin
+    - docker tag $IMAGE_NAME $HUB_USERNAME/hust:$PROJECT_NAME
+    - docker push $HUB_USERNAME/hust:$PROJECT_NAME
+    - docker logout

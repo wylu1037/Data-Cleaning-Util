@@ -1,4 +1,4 @@
-module baas-clean
+module clear-chain
 
 go 1.18
 
@@ -7,6 +7,7 @@ require (
 	github.com/go-ini/ini v1.67.0
 	github.com/gomodule/redigo v1.8.9
 	github.com/jinzhu/gorm v1.9.16
+	github.com/sirupsen/logrus v1.9.0
 )
 
 require (
