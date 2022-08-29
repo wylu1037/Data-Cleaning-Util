@@ -19,5 +19,6 @@ FROM scratch
 WORKDIR /app
 
 COPY --from=builder /build/clear .
+COPY --from=builder /build/config/application.ini ./config/application.ini
 
 ENTRYPOINT ["/app/clear"]
