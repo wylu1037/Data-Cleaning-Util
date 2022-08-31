@@ -7,6 +7,7 @@ import (
 	"clear-chain/util"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"math"
 	"net/http"
 )
 
@@ -15,6 +16,7 @@ func ChainRoute(e *gin.Engine) {
 	e.GET("/chain/delete/:chainId", deleteChainInfoHandler)
 	e.GET("/chain/findNodes", findNodesByChainId)
 	e.GET("/chain/range/delete/:begin/:end", deleteRangeChainInfoHandler)
+	e.GET("/chain/getAll", findAllChainHandler)
 }
 
 // 查询链信息
@@ -53,6 +55,7 @@ func findNodesByChainId(c *gin.Context) {
 	chainId := util.Str2uint64(c.Query("chainId"))
 
 	c.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
 		"message": "查询节点列表成功！",
 		"data":    node.FindNodesByChainId(chainId),
 	})
@@ -67,5 +70,15 @@ func deleteRangeChainInfoHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "删除范围内的链成功！",
 		"data":    nil,
+	})
+}
+
+func findAllChainHandler(c *gin.Context) {
+	chains := chain.FindRangeChainInfo(1, math.MaxInt64)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
+		"message": "查找所有链信息成功！",
+		"data":    chains,
 	})
 }
