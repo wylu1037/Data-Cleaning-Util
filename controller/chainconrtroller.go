@@ -17,6 +17,7 @@ func ChainRoute(e *gin.Engine) {
 	e.GET("/chain/findNodes", findNodesByChainId)
 	e.GET("/chain/range/delete/:begin/:end", deleteRangeChainInfoHandler)
 	e.GET("/chain/getAll", findAllChainHandler)
+	e.POST("/chain/findPageChainList", findPageChainListHandler)
 }
 
 // 查询链信息
@@ -81,4 +82,19 @@ func findAllChainHandler(c *gin.Context) {
 		"message": "查找所有链信息成功！",
 		"data":    chains,
 	})
+}
+
+func findPageChainListHandler(c *gin.Context) {
+	var req chain.PageChainListReq
+	if err := c.ShouldBind(&req); err == nil {
+		data := chain.FindPageChainList(req)
+		c.JSON(http.StatusOK, gin.H{
+			"code":    http.StatusOK,
+			"data":    data,
+			"message": "查询列表成功！",
+		})
+	} else {
+		c.JSON(http.StatusBadRequest,
+			gin.H{"code": http.StatusBadRequest, "error": err.Error()})
+	}
 }

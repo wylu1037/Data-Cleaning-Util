@@ -2,6 +2,7 @@ package chain
 
 import (
 	"clear-chain/config"
+	"clear-chain/util/json"
 	"github.com/sirupsen/logrus"
 )
 
@@ -58,4 +59,40 @@ func FindRangeChainInfo(begin, end uint64) []Chain {
 	var chains []Chain
 	config.MySqlDB.Where("id >= ? and id <= ?", begin, end).Find(&chains)
 	return chains
+}
+
+type PageChainListReq struct {
+	Name string
+	Page uint64
+	Size uint64
+}
+
+type PageChainListResult struct {
+	Total uint64
+	List  []Chain
+}
+
+// FindPageChainList 分页查询查询链列表
+func FindPageChainList(req PageChainListReq) PageChainListResult {
+	logrus.Infof("[chain] FindPageChainList() called with: req = %v", json.ToStr(req))
+
+	result := PageChainListResult{}
+	total := findChainTotal()
+	result.Total = total
+	if total == 0 {
+		result.List = nil
+		return result
+	}
+
+	var chainList []Chain
+	config.MySqlDB.Limit(req.Size).Offset(req.Page - 1).Find(&chainList)
+	result.List = chainList
+	return result
+}
+
+// 查询总数
+func findChainTotal() uint64 {
+	var total uint64
+	config.MySqlDB.Model(&Chain{}).Where("id > ?", 0).Count(&total)
+	return total
 }
